@@ -71,7 +71,9 @@ Hands vs feet are distinguished by **shape, not just color** (colorblind-safe), 
 
 ## Spacing, shape, touch
 - 8-pt grid (4, 8, 12, 16, 20, 24, 32, 40). Screen padding 16.
-- Radii: 10 (inputs/chips), 14 (cards), 20 (sheets), full (capture button).
+- Radii: 10 (inputs/chips), 14 (cards, buttons), 20 (sheets), full (capture button).
+- Borders: 1 (hairline), 2 (focus/error ring). Opacity: 0.7 pressed, 0.4 disabled.
+- Selected chips/segments invert (ink fill + cream text in light mode). Orange stays reserved for primary actions.
 - **Minimum touch target 48 pt** everywhere (decision C5). Capture button 76 pt. Tappable holds are expanded to at least 48 pt hit areas even when the hold is small.
 - Primary actions at the **bottom**. Respect safe areas (notch/home indicator) on web too.
 
