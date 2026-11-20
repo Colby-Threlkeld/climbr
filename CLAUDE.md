@@ -11,7 +11,7 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 01 nearly done** (repo hygiene files committed on `chore/repo-bootstrap`; developer still creates the `node_modules` junction). **Next: step 02** in `docs/plan/BUILD_PLAN.md`.
+**Step 01 done** (repo hygiene files, `node_modules` junction to `C:\dev-cache\cruxshot\node_modules`). **Next: step 02** in `docs/plan/BUILD_PLAN.md`.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step

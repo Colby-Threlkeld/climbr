@@ -12,7 +12,7 @@ Status: ⬜ not started · 🟨 in progress · ✅ done · ⏸ blocked
 
 | # | Step | Depends on | Status |
 |---|---|---|---|
-| 01 | [Repo bootstrap](steps/01-repo-bootstrap.md) | — | 🟨 waiting on `node_modules` junction (developer) |
+| 01 | [Repo bootstrap](steps/01-repo-bootstrap.md) | — | ✅ |
 | 02 | [Scaffold Expo app + CI](steps/02-scaffold-expo.md) | 01 | ⬜ |
 | 03 | [Theme tokens + typography](steps/03-theme-tokens.md) | 02 | ⬜ |
 | 04 | [UI primitives I + dev gallery](steps/04-ui-primitives-1.md) | 03 | ⬜ |
