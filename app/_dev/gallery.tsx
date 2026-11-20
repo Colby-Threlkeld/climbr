@@ -3,7 +3,18 @@ import { useState } from 'react';
 import { ScrollView, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-import { Button, Card, Chip, SegmentedControl, Text, TextField } from '@/components/ui';
+import {
+  Button,
+  Card,
+  Chip,
+  ProgressSteps,
+  SegmentedControl,
+  Sheet,
+  Slider,
+  Text,
+  TextField,
+  useToast,
+} from '@/components/ui';
 import { spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
@@ -19,6 +30,12 @@ const captureOptions = [
   { value: 'photo', label: 'Route photo' },
   { value: 'video', label: 'Video' },
 ] as const;
+const routeStages = [
+  { key: 'upload', label: 'Uploading' },
+  { key: 'holds', label: 'Finding holds' },
+  { key: 'beta', label: 'Suggesting beta' },
+  { key: 'done', label: 'Ready' },
+] as const;
 
 function Gallery() {
   const { colors, scheme } = useTheme();
@@ -27,6 +44,12 @@ function Gallery() {
   const [capture, setCapture] = useState<'photo' | 'video'>('photo');
   const [height, setHeight] = useState('');
   const [loading, setLoading] = useState(false);
+  const [sheetOpen, setSheetOpen] = useState(false);
+  const [wingspan, setWingspan] = useState(178);
+  const [savedWingspan, setSavedWingspan] = useState(178);
+  const [step, setStep] = useState(2);
+  const [job, setJob] = useState({ stage: 1, percent: 35 });
+  const toast = useToast();
 
   const heightError = height !== '' && !/^\d+(\.\d+)?$/.test(height) ? 'Enter a number in cm' : '';
 
@@ -111,6 +134,105 @@ function Gallery() {
           onChange={setCapture}
         />
       </Section>
+
+      <Section title="Slider">
+        <Text variant="numeric">
+          Wingspan {wingspan} cm (saved {savedWingspan})
+        </Text>
+        <Slider
+          accessibilityLabel="Wingspan"
+          min={140}
+          max={220}
+          value={wingspan}
+          onChange={setWingspan}
+          onChangeEnd={setSavedWingspan}
+          formatValue={(v) => `${v} centimeters`}
+        />
+        <Slider
+          accessibilityLabel="Disabled slider"
+          min={0}
+          max={10}
+          value={4}
+          disabled
+          onChange={() => {}}
+        />
+      </Section>
+
+      <Section title="ProgressSteps">
+        <ProgressSteps variant="bar" total={4} current={step} accessibilityLabel="Onboarding" />
+        <View style={{ flexDirection: 'row', gap: spacing.xs }}>
+          <Button
+            label="Back"
+            variant="secondary"
+            onPress={() => setStep((s) => Math.max(0, s - 1))}
+          />
+          <Button
+            label="Next"
+            variant="secondary"
+            onPress={() => setStep((s) => Math.min(4, s + 1))}
+          />
+        </View>
+        <ProgressSteps
+          variant="stages"
+          stages={routeStages}
+          activeIndex={job.stage}
+          percent={job.percent}
+        />
+        <Button
+          label="Advance job"
+          variant="secondary"
+          onPress={() =>
+            setJob(({ stage, percent }) =>
+              percent >= 100
+                ? { stage: 0, percent: 0 }
+                : {
+                    stage: Math.min(routeStages.length - 1, stage + 1),
+                    percent: Math.min(100, percent + 25),
+                  },
+            )
+          }
+        />
+      </Section>
+
+      <Section title="Toast">
+        <Button
+          label="Info toast"
+          variant="secondary"
+          onPress={() => toast({ message: 'Photo saved' })}
+        />
+        <Button
+          label="Success toast"
+          variant="secondary"
+          onPress={() => toast({ message: 'Profile updated', tone: 'success' })}
+        />
+        <Button
+          label="Error toast with action"
+          variant="secondary"
+          onPress={() =>
+            toast({
+              message: 'Upload failed',
+              tone: 'error',
+              action: { label: 'Retry', onPress: () => toast({ message: 'Retrying…' }) },
+            })
+          }
+        />
+      </Section>
+
+      <Section title="Sheet">
+        <Button label="Open sheet" onPress={() => setSheetOpen(true)} />
+      </Section>
+
+      <Sheet visible={sheetOpen} onClose={() => setSheetOpen(false)} title="Adjust wingspan">
+        <Text color="textSecondary">Drag down, tap outside, or press Done to close.</Text>
+        <Slider
+          accessibilityLabel="Wingspan in sheet"
+          min={140}
+          max={220}
+          value={wingspan}
+          onChange={setWingspan}
+        />
+        <Button label="Done" onPress={() => setSheetOpen(false)} />
+      </Sheet>
     </ScrollView>
   );
 }

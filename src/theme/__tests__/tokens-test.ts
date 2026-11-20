@@ -25,6 +25,7 @@ describe('tokens match the design system', () => {
       success: '#1F9D55',
       warning: '#C98A00',
       danger: '#D92D20',
+      scrim: 'rgba(20, 20, 20, 0.4)',
     });
     expect(colors.dark).toEqual({
       bg: '#141414',
@@ -37,6 +38,7 @@ describe('tokens match the design system', () => {
       success: '#34C26F',
       warning: '#F2B233',
       danger: '#F2574B',
+      scrim: 'rgba(0, 0, 0, 0.6)',
     });
   });
 
@@ -62,7 +64,7 @@ describe('tokens match the design system', () => {
     expect(spacing.screen).toBe(16);
     expect([radii.control, radii.card, radii.sheet]).toEqual([10, 14, 20]);
     expect(touch).toEqual({ min: 48, capture: 76 });
-    expect(motion).toEqual({ screen: 250, sheet: 300, avatarMove: 800 });
+    expect(motion).toEqual({ screen: 250, sheet: 300, avatarMove: 800, toast: 4000 });
   });
 
   it('type scale (size / line height / weight)', () => {

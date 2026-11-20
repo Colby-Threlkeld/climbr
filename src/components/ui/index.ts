@@ -7,5 +7,9 @@ export {
   type SegmentOption,
   type SegmentedControlProps,
 } from './SegmentedControl';
+export { ProgressSteps, type ProgressStage, type ProgressStepsProps } from './ProgressSteps';
+export { Sheet, type SheetProps } from './Sheet';
+export { Slider, type SliderProps } from './Slider';
 export { Text, type TextColor, type TextProps } from './Text';
 export { TextField, type TextFieldProps } from './TextField';
+export { ToastProvider, useToast, type ToastOptions, type ToastTone } from './Toast';
