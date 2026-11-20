@@ -11,7 +11,7 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 02 in progress** on `chore/scaffold-expo`: Expo SDK 58 + Router scaffolded at the repo root, and lint, typecheck, test and CI are wired. Still needed: phone checks (iPhone Safari, Android Chrome, Expo Go) and green CI on the PR. The repo moved out of OneDrive to `C:\dev\cruxshot` (decision O3, revised). **Next: step 03** once 02 is ✅.
+**Step 02 done** (Expo SDK 58 + Router at the repo root; lint, typecheck, test and CI green; phone checks passed). The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 03** in `docs/plan/BUILD_PLAN.md`.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step
