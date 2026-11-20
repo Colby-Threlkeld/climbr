@@ -12,18 +12,24 @@
 7. ⚠️ **Testing web on your phone:** phones require **HTTPS** for camera features, so use Vercel preview deployments (an HTTPS link on every Git push) or `npx expo start --tunnel`. Plain LAN `http://` won't open the camera.
 8. Linting: ESLint + Prettier (app), **Ruff** lint + format (worker, decision C2). Strict typing both sides.
 
-## Commands *(planned)*
+## Commands
+
+App commands verified in step 02 (Expo SDK 58). Others are *(planned)* until their step.
 
 ```bash
 # App (root) — npm is the package manager
-npm install
+npm install                 # after pulling; CI uses `npm ci`
+npx expo install <pkg>      # ALWAYS use this to add packages (picks SDK-compatible versions)
+                            # dev deps on Windows: npx expo install <pkg> "--" --save-dev
 npx expo start              # dev server (press w for web)
-npx expo start --tunnel     # HTTPS-ish URL for phone camera testing
-npm run lint                # eslint + prettier --check
+npx expo start --tunnel     # public HTTPS URL for phones / Expo Go off your Wi-Fi
+npm run lint                # expo lint (ESLint) + prettier --check
+npm run format              # prettier --write (fixes formatting, incl. CRLF → LF)
 npm run typecheck           # tsc --noEmit
 npm test                    # jest (jest-expo preset)
-npm run schemas             # regenerate TS + Python types from shared/schemas
-npx expo export -p web      # static web build (deployed by Vercel)
+npx expo-doctor             # dependency/config health check
+npx expo export -p web      # web build into dist/ (deployed by Vercel)
+npm run schemas             # (planned, step 17) regenerate TS + Python types from shared/schemas
 
 # Supabase (requires Docker Desktop)
 npx supabase start          # local stack
@@ -40,20 +46,8 @@ uv run modal serve app.py   # dev deploy; `modal deploy app.py` for prod
 ```
 
 ## Windows / environment gotchas
-- **Repo is inside OneDrive** and stays there (decision O3). OneDrive syncing `node_modules`, `.venv`, `.expo`, and Metro caches causes file-lock errors and slow installs. **Keep them out of sync.** OneDrive has no simple per-folder "ignore" for folders inside a synced tree (*Free up space* only removes local copies, it still syncs). A common workaround is to make those folders junctions that point outside OneDrive. Check afterwards that OneDrive shows no sync activity for them.
-  - **`node_modules`** (step 01, before the first `npm install`):
-    ```powershell
-    New-Item -ItemType Directory -Force C:\dev-cache\cruxshot\node_modules | Out-Null
-    cmd /c mklink /J node_modules C:\dev-cache\cruxshot\node_modules
-    ```
-    Use `npm install`, not `npm ci` (`npm ci` deletes `node_modules` and can remove the junction). Step 02 verifies Metro resolves modules through the junction; if it doesn't, remove the junction and pause OneDrive during installs instead.
-  - **`worker\.venv`** (step 16, after `worker/` exists): let uv create the venv in the cache folder first, then junction to it, so uv always sees a valid environment:
-    ```powershell
-    uv venv C:\dev-cache\cruxshot\worker-venv --python 3.11
-    cmd /c mklink /J worker\.venv C:\dev-cache\cruxshot\worker-venv
-    ```
-  - `.expo/` is small; Metro's cache lives in `%TEMP%` (outside OneDrive) by default.
-  - If you still see `EBUSY`/`EPERM` errors, pause OneDrive syncing while installing.
+- **The repo lives outside OneDrive at `C:\dev\cruxshot`** (decision O3, revised in step 02). OneDrive syncing `node_modules` / `.venv` (tens of thousands of files) causes file-lock errors and slow installs, and OneDrive can't ignore a subfolder. The step 01 workaround (a `node_modules` junction pointing outside OneDrive) **does not work**: `npm install` prints `Removing non-directory ...\node_modules`, deletes the junction, and installs a real folder in its place. GitHub is the backup, so push your branches. Plain `node_modules` and `worker\.venv` folders are fine here; no junctions needed.
+  - Don't clone or copy the repo back into a OneDrive folder (Desktop/Documents are often OneDrive-backed on Windows).
 - `C:\Users\colby` may itself be a git repo (likely accidental). Run git commands from the repo root and check `git rev-parse --show-toplevel` so you don't commit to the wrong one.
 - Supabase local dev and pgTAP need **Docker Desktop** (WSL2 backend).
 - Skia's web build is ~MBs of WASM. Measure first-load on a real phone before committing to it (plan step 10).

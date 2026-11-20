@@ -11,7 +11,7 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 01 done** (repo hygiene files, `node_modules` junction to `C:\dev-cache\cruxshot\node_modules`). **Next: step 02** in `docs/plan/BUILD_PLAN.md`.
+**Step 02 in progress** on `chore/scaffold-expo`: Expo SDK 58 + Router scaffolded at the repo root, and lint, typecheck, test and CI are wired. Still needed: phone checks (iPhone Safari, Android Chrome, Expo Go) and green CI on the PR. The repo moved out of OneDrive to `C:\dev\cruxshot` (decision O3, revised). **Next: step 03** once 02 is ✅.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step
@@ -39,10 +39,11 @@ Update this line and the Commands section at the end of every step.
 13. **`src/avatar/` stays renderer-agnostic:** joints, poses, and corrections only, no drawing code.
 14. **Metric only** in DB, schemas, and worker. Image coordinates are normalized 0–1. Limbs are `LH | RH | LF | RF`.
 
-## Commands *(planned, verify in steps 02, 07, 16)*
+## Commands *(app verified in step 02; Supabase/worker verify in steps 07, 16)*
 ```bash
 npm install && npx expo start          # app (press w for web); --tunnel for phone camera (HTTPS)
-npm run lint && npm run typecheck && npm test
+npx expo install <pkg>                 # add packages (dev: npx expo install <pkg> "--" --save-dev)
+npm run lint && npm run typecheck && npm test   # npm run format fixes Prettier/CRLF issues
 npm run schemas                        # regenerate TS + Pydantic types
 npx supabase start | db reset | test db   # needs Docker Desktop
 cd worker && uv sync && uv run ruff check . && uv run pytest
@@ -54,4 +55,4 @@ Full reference: `docs/dev/setup-windows.md`.
 Works on phone web and Expo Go. Lint, typecheck, and tests pass. RLS tests exist for new tables. AI states are handled. Schemas are in sync and `.env.example` is updated. No body data in logs and no secrets in the bundle. Manual checklist is written. Docs are updated. Full list: `docs/dev/testing.md`.
 
 ## Working with the developer
-The developer is learning. Explain non-obvious choices briefly and comment the *why* in code. Give exact Windows (PowerShell) commands. Prefer the simplest thing that meets the spec, and justify every new dependency. The repo lives in OneDrive, so keep `node_modules` and `.venv` out of sync (`docs/dev/setup-windows.md`). Disagree openly with a decision if needed, but don't override it unilaterally.
+The developer is learning. Explain non-obvious choices briefly and comment the *why* in code. Give exact Windows (PowerShell) commands. Prefer the simplest thing that meets the spec, and justify every new dependency. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3). Never move it back (`docs/dev/setup-windows.md`). Disagree openly with a decision if needed, but don't override it unilaterally.

@@ -1,0 +1,11 @@
+# Hand-written docs keep their own formatting.
+*.md
+docs/
+
+# Generated / installed files
+package-lock.json
+dist/
+web-build/
+.expo/
+coverage/
+expo-env.d.ts
