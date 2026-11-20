@@ -11,7 +11,7 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 02 done** (Expo SDK 58 + Router at the repo root; lint, typecheck, test and CI green; phone checks passed). The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 03** in `docs/plan/BUILD_PLAN.md`.
+**Step 03 in progress** on `feat/theme-tokens`. Done: tokens, `useTheme()`, and `src/components/ui/Text.tsx`; ESLint blocks hex colors outside `tokens.ts`. Still needed: light/dark phone checks and green CI on the PR. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 04** once 03 is ✅.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step
