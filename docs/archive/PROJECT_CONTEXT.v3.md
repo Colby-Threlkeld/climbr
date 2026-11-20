@@ -1,3 +1,5 @@
+> ⚠️ **ARCHIVED — do not edit, do not use as a source.** This is the frozen v3 spec (November 2026). Its content was split into `docs/` and the audit decisions in `docs/product/decisions.md` override it where they differ. Start at `docs/README.md`.
+
 # PROJECT CONTEXT: AI Climbing Coach (working name: **Cruxshot**)
 
 > **What this file is:** the single source of truth for this project. Give it to any AI coding assistant (Claude, Cursor, Copilot) or any collaborator *before* asking them to build anything. It explains what the app is, who it's for, how it works, why each decision was made, and what's still undecided.
