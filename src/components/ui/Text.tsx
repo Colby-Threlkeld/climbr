@@ -1,11 +1,20 @@
 import { Text as RNText, type TextProps as RNTextProps } from 'react-native';
 
-import { fontFamily, textScale, type, type TypeVariant } from '@/theme/tokens';
+import { fontFamily, textScale, type, type ColorToken, type TypeVariant } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
 // Only colors meant for reading. `accent` is deliberately excluded: never orange body text.
-// Status colors (success/warning/danger) are for icons and badges, not text.
-export type TextColor = 'textPrimary' | 'textSecondary' | 'onAccent';
+// `inverse` is text on an ink/cream-inverted fill (selected chips/segments).
+// `danger` is only for form error messages; other status colors are icons and badges only.
+const textColorToken = {
+  textPrimary: 'textPrimary',
+  textSecondary: 'textSecondary',
+  onAccent: 'onAccent',
+  inverse: 'bg',
+  danger: 'danger',
+} as const satisfies Record<string, ColorToken>;
+
+export type TextColor = keyof typeof textColorToken;
 
 export type TextProps = RNTextProps & {
   variant?: TypeVariant;
@@ -27,7 +36,7 @@ export function Text({
       maxFontSizeMultiplier={dense ? textScale.denseMax : undefined}
       style={[
         type[variant],
-        { color: theme.colors[color] },
+        { color: theme.colors[textColorToken[color]] },
         fontFamily ? { fontFamily } : null,
         style,
       ]}

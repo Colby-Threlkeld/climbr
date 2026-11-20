@@ -11,7 +11,7 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 03 in progress** on `feat/theme-tokens`. Done: tokens, `useTheme()`, and `src/components/ui/Text.tsx`; ESLint blocks hex colors outside `tokens.ts`. Still needed: light/dark phone checks and green CI on the PR. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 04** once 03 is ✅.
+**Step 03 done** (PR #2, CI green). **Step 04 in progress** on `feat/ui-primitives-1`, branched from `feat/theme-tokens`. Built: Button, Card, TextField, Chip, SegmentedControl, the haptics wrapper, and a dev gallery at `/_dev/gallery`; ESLint now blocks hard-coded colors **and sizes**. The checklist passed in headless Edge with an iPhone-size viewport, light and dark. Use `aria-*` props, not `accessibilityState`: react-native-web ignores the latter. Still needed on a real device: Expo Go rendering, haptics, and large accessibility text. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 05** once 04 is ✅.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step
