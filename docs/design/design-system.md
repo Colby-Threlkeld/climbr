@@ -52,7 +52,7 @@ Overlay components live in `src/components/overlay/`: **HoldOutline, BetaDots, S
 The derived tokens (`surface` in dark mode, `surfaceAlt`, `textSecondary`) are tints of cream and ink, so the brand stays three colors.
 
 ### Overlay palette
-Used on top of photos/video, always with a **dark outline + soft shadow** so they read on any wall color.
+Used on top of photos/video, always with a **dark outline + soft shadow** so they read on any wall color. The outline and shadow color is **ink `#141414`**, which keeps the brand at three colors.
 
 | Element | Color | Shape |
 |---|---|---|

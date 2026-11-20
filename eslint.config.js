@@ -8,4 +8,23 @@ module.exports = defineConfig([
   globalIgnores(['dist/*', 'web-build/*', '.expo/*', 'coverage/*']),
   expoConfig,
   prettierConfig,
+  {
+    // CLAUDE.md rule 2: hex colors live only in src/theme/tokens.ts. Tests are exempt
+    // because they hold the expected values copied from the design doc.
+    files: ['src/**/*.{ts,tsx}', 'app/**/*.{ts,tsx}'],
+    ignores: ['src/theme/tokens.ts', '**/__tests__/**'],
+    rules: {
+      'no-restricted-syntax': [
+        'error',
+        {
+          selector: 'Literal[value=/#[0-9a-fA-F]{3,8}\\b/]',
+          message: 'Hard-coded color. Use a token from src/theme/tokens.ts.',
+        },
+        {
+          selector: 'TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]',
+          message: 'Hard-coded color. Use a token from src/theme/tokens.ts.',
+        },
+      ],
+    },
+  },
 ]);

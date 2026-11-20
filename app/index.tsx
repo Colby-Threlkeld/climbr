@@ -1,11 +1,27 @@
-import { Text, View } from 'react-native';
+import { View } from 'react-native';
 
-// Placeholder until the theme (step 03) and tab shell (step 06) exist.
-// Deliberately unstyled beyond layout: no colors or sizes until tokens land.
+import { Text } from '@/components/ui/Text';
+import { spacing } from '@/theme/tokens';
+import { useTheme } from '@/theme/useTheme';
+
+// Placeholder until the tab shell (step 06) exists. Styled with tokens only.
 export default function Index() {
+  const { colors } = useTheme();
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Text>Cruxshot</Text>
+    <View
+      style={{
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: spacing.xs,
+        padding: spacing.screen,
+        backgroundColor: colors.bg,
+      }}
+    >
+      <Text variant="largeTitle">Cruxshot</Text>
+      <Text variant="subhead" color="textSecondary">
+        Suggested beta for indoor bouldering
+      </Text>
     </View>
   );
 }
