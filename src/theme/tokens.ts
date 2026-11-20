@@ -78,6 +78,16 @@ export const radii = {
   full: 9999, // capture button / pills
 } as const;
 
+export const borderWidth = {
+  hairline: 1,
+  thick: 2, // focus / error rings
+} as const;
+
+export const opacity = {
+  pressed: 0.7,
+  disabled: 0.4,
+} as const;
+
 // Decision C5: nothing tappable smaller than 48 pt (chalky fingers, one hand busy).
 export const touch = {
   min: 48,

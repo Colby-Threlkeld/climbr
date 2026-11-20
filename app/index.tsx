@@ -1,6 +1,7 @@
+import { router } from 'expo-router';
 import { View } from 'react-native';
 
-import { Text } from '@/components/ui/Text';
+import { Button, Text } from '@/components/ui';
 import { spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
@@ -22,6 +23,14 @@ export default function Index() {
       <Text variant="subhead" color="textSecondary">
         Suggested beta for indoor bouldering
       </Text>
+      {/* Dev-only entry point: Expo Go has no URL bar to type /_dev/gallery into. */}
+      {__DEV__ ? (
+        <Button
+          label="Component gallery"
+          variant="ghost"
+          onPress={() => router.push('/_dev/gallery')}
+        />
+      ) : null}
     </View>
   );
 }

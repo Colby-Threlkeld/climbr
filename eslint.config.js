@@ -9,7 +9,7 @@ module.exports = defineConfig([
   expoConfig,
   prettierConfig,
   {
-    // CLAUDE.md rule 2: hex colors live only in src/theme/tokens.ts. Tests are exempt
+    // CLAUDE.md rule 2: colors and sizes live only in src/theme/tokens.ts. Tests are exempt
     // because they hold the expected values copied from the design doc.
     files: ['src/**/*.{ts,tsx}', 'app/**/*.{ts,tsx}'],
     ignores: ['src/theme/tokens.ts', '**/__tests__/**'],
@@ -23,6 +23,13 @@ module.exports = defineConfig([
         {
           selector: 'TemplateElement[value.raw=/#[0-9a-fA-F]{3,8}\\b/]',
           message: 'Hard-coded color. Use a token from src/theme/tokens.ts.',
+        },
+        {
+          // Numeric literals on size-like style keys (padding: 12, fontSize: 17, ...).
+          // 0 is allowed; flex: 1 isn't matched because `flex` isn't a size key.
+          selector:
+            "Property[key.name=/^(padding|margin|gap|rowGap|columnGap|width|height|minWidth|minHeight|maxWidth|maxHeight|top|bottom|left|right|inset|fontSize|lineHeight|letterSpacing|borderRadius|border.*Width|opacity)/][value.type='Literal'][value.raw=/^[0-9.]+$/][value.raw!='0']",
+          message: 'Hard-coded size. Use a token from src/theme/tokens.ts.',
         },
       ],
     },
