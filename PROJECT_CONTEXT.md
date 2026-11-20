@@ -2,9 +2,11 @@
 
 > **What this file is:** the single source of truth for this project. Give it to any AI coding assistant (Claude, Cursor, Copilot) or any collaborator *before* asking them to build anything. It explains what the app is, who it's for, how it works, why each decision was made, and what's still undecided.
 >
-> **How to read it:** sections marked **🔶 DECISION** are professional calls made on the founder's behalf to fill gaps. They are deliberate defaults, not facts. Confirm or change them, then delete the marker.
+> **How to read it:** all product decisions are **finalized** (see the decisions log in §16). Any new default proposed later is marked **🔶 DECISION** until the founder confirms it.
 >
-> **Version:** 2 (scope expanded to AI route reading, video technique analysis, avatars, and body-profile onboarding). November 2026.
+> **Scope:** **indoor bouldering gyms only.** No outdoor climbing, no rope climbing.
+>
+> **Version:** 3 (decisions finalized: no weight, 13+ with parental consent, new brand colors, 2D avatar with parallel 3D R&D). November 2026.
 
 ---
 
@@ -14,11 +16,13 @@
 
 1. **Route Reader.** Photograph a boulder problem → the app detects the holds → it draws **numbered dots and lines showing a suggested sequence** sized to your height and reach → an **animated avatar climbs the route on your photo** to show you how.
 2. **Technique Review.** Film yourself climbing → the app tracks your body → it gives you **specific, timestamped feedback** on what you did well and what to improve → a **"ghost" avatar overlays your video showing the better body position** at exactly the moment it's talking about.
-3. **Climber Profile.** Onboarding collects **height, wingspan (ape index), optional weight, experience, grade, and style**, so every suggestion fits the person climbing.
+3. **Climber Profile.** Onboarding collects **height, wingspan (ape index), experience, grade, and style**, so every suggestion fits the person climbing.
 
 **Build approach:** React Native + Expo (TypeScript), developed on a **Windows laptop**. Phase 1 testers use it as a **mobile web app** (free, opened from a link). The same code later becomes the **native iPhone/Android app**. The AI runs on a **cloud Python service** (computer vision + a vision-capable LLM). Data and media live in **Supabase**.
 
-**First users:** indoor **boulderers** at one partner gym. 🔶 DECISION
+**First users:** indoor **boulderers** at our partner bouldering gym (secured, along with a strong climber/setter for testing and labeling).
+
+**Ambition:** this is a **startup**: build for real users, real quality, and eventual scale.
 
 ---
 
@@ -44,7 +48,7 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 **What this means:**
 - ✅ **Demand is validated.** People are building and paying for this.
 - ⚠️ **"AI beta" alone is not a differentiator.** Testing has to find out what makes Cruxshot clearly better.
-- 🔶 **DECISION: proposed differentiators**, to test with climbers:
+- **Differentiators** (confirmed, to validate with climbers):
   1. **One loop, not two tools:** see the suggested beta → try it → film it → get coached *against that beta* → see the avatar correction. Competitors do one half.
   2. **Truly body-aware:** sequences and corrections change based on *your* height and ape index, and the app **says so** ("At 5'4" with a +1 ape index, this cross is out of reach, so match instead").
   3. **Show, don't tell:** every piece of feedback has a visual (dots, avatar, ghost overlay). No walls of text.
@@ -55,10 +59,10 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 ## 3. Product definition
 
 ### 3.1 Target users
-- **Primary:** indoor boulderers, V0–V7, 18–40, who climb 1–3×/week and want to improve but don't pay for coaching.
-- **Not for Phase 1:** outdoor rock (hold detection on real rock is much harder), rope climbing (long routes don't fit one photo), competition athletes.
+- **Primary:** indoor gym boulderers, V0–V7, ages 13+ (13–17 with parental consent, see §10), who climb 1–3×/week and want to improve but don't pay for coaching.
+- **Out of scope:** outdoor climbing of any kind (hold detection on real rock is much harder), rope climbing (long routes don't fit one photo), and competition athletes.
 
-### 3.2 Why bouldering in a gym first 🔶 DECISION
+### 3.2 Why bouldering gyms only
 - Gym holds are **brightly colored plastic on flat walls**, the easiest case for computer vision.
 - Gym routes are **color-coded**, so "which holds are in this route" can be answered by picking a color.
 - Bouldering walls are **short enough to fit in one photo**.
@@ -71,9 +75,9 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 
 | Field | Required? | Why it matters | Notes |
 |---|---|---|---|
+| Birth year | **Required** (at sign-up) | Age gate: under 13 blocked, 13–17 need parental consent (§10) | Asked once, never displayed |
 | Height | **Required** | Reach and the size of the avatar | ft/in or cm |
 | Wingspan | **Optional** | **Ape index** (wingspan − height) changes which moves are possible | Three ways, user's choice: **① Estimate from a photo** (arms-out photo, see §5.7) · **② Type it in** (with a 10-second "how to measure with a tape" illustration) · **③ Skip**. Default = height (ape index 0) if skipped. Can be added or redone later in Profile |
-| Weight | **Optional** | Minor factor (small/poor holds, dynamic moves) | Always "Prefer not to say" available. **Never displayed** anywhere in the app. Explain why it's asked. 🔶 DECISION |
 | Experience | Required | Pitches the language and advice to their level | "New (< 6 months)", "1–2 years", "3+ years" |
 | Hardest boulder sent (recent) | Required | Calibrates difficulty of advice | V-scale picker (Font optional) |
 | Style strengths/weaknesses | Optional | Personalizes feedback ("you said slab is your weakness") | Multi-select: slab, vertical, overhang, crimps, slopers, dynos, heel/toe hooks |
@@ -98,7 +102,7 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 **User flow:**
 1. **Capture.** Camera opens with a framing guide: "Stand back, face the wall straight on, get the whole problem in frame including the floor." (Straight-on photos massively improve accuracy.)
 2. **Hold detection** (cloud, target < 5 s). All detected holds are outlined.
-3. **Pick the route.** Tap a **hold color** (gym routes are color-coded) *or* tap holds to add or remove them. Then mark the **start hold(s)** and the **top hold**. 🔶 DECISION: this "assisted" step is deliberate. Fully automatic route picking is unreliable, and 10 seconds of user input makes results far more accurate.
+3. **Pick the route.** Tap a **hold color** (gym routes are color-coded) *or* tap holds to add or remove them. Then mark the **start hold(s)** and the **top hold**. This "assisted" step is deliberate. Fully automatic route picking is unreliable, and 10 seconds of user input makes results far more accurate.
 4. **Scale check.** The app needs to know how big things are in real life. Default: the wall height from the location profile (most bouldering walls are ~4–4.5 m), with a quick "Is this about right?" slider. Phase 2: auto-calibration.
 5. **Suggested beta** (cloud, target < 10 s): **numbered dots on each hand and foot hold, connected by lines**, color-coded by limb (left hand, right hand, left foot, right foot). Up to **3 alternative sequences** ("Static", "Dynamic", "Short-climber friendly").
 6. **Watch the avatar.** A 2D avatar **scaled to the user's body** animates move by move over the photo. Controls: play/pause, step forward/back one move, speed 0.5×/1×.
@@ -112,7 +116,7 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 
 **User flow:**
 1. **Record or upload** a video of one attempt. Recording guide: "Phone propped or held by a friend, whole wall in frame, ~3–5 m back, landscape or portrait both OK."
-2. **Trim** to the climb (start/end handles). Max **60 seconds**. 🔶 DECISION (keeps cost and processing time reasonable).
+2. **Trim** to the climb (start/end handles). Max **60 seconds** (keeps cost and processing time reasonable).
 3. Optionally **link to a Route Reader scan** of the same problem (enables "compare to suggested beta").
 4. **Upload and processing** with a progress screen ("Tracking your movement… Finding key moments… Writing your feedback…"). Target < 90 s. Push/in-app notification when done so they can keep climbing.
 5. **Results screen:**
@@ -136,9 +140,8 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 - Account deletion, privacy controls
 
 **Deliberately later:**
-- **3D avatar** (Phase 3+. See §5.5 for why)
+- **3D avatar** (R&D runs in parallel from Phase 1, ships once it beats the 2D version. See §5.5)
 - Live/real-time coaching while recording
-- Outdoor rock, ropes
 - Social: sharing beta to a gym feed, following friends, comparing with others on the same problem
 - Gym/setter dashboard (possible business model later)
 - Training plans, finger-strength programs
@@ -217,25 +220,28 @@ AI climbing apps already exist. As of late 2026 there are apps that **detect hol
 - **Model:** a vision-capable LLM via API (default: **Claude** via the Anthropic API). Swappable behind one interface.
 - **Input:** user profile, pillar metrics, key-moment data, **3–6 key frames as images**, and (if linked) the suggested beta.
 - **Output:** **strict JSON** following a schema (key moments, explanations, a positive, a drill, and a **correction spec** for each moment, e.g. `{"joint":"hips","action":"rotate_toward_wall","amount":"medium"}`). Validate the JSON. Retry once if it's invalid.
-- **Tone guide (in the system prompt):** encouraging, specific, plain words, and climbing terms explained once for beginners. Never shame body type or weight. **Never mention weight** unless the user explicitly asks.
+- **Tone guide (in the system prompt):** encouraging, specific, plain words, and climbing terms explained once for beginners. Never comment on body type, size, or weight. The app does not collect weight, and coaching **never mentions it**.
 - **Safety guardrails:** don't suggest moves beyond the user's level that risk injury, and respect stated injuries. Always frame suggestions as things to try, not guarantees.
 
 ### 5.5 Avatars (route demo + correction ghost)
 **One shared avatar renderer** is used by both features.
 
-- 🔶 **DECISION: Phase 1 avatar is a stylized 2D figure**, a clean mannequin made of rounded limb shapes (not a stick figure, not a realistic human), drawn over the photo/video with **react-native-skia** or **react-native-svg** (both work on web and native).
+- **Phase 1 avatar is a stylized 2D figure**, a clean mannequin made of rounded limb shapes (not a stick figure, not a realistic human), drawn over the photo/video with **react-native-skia** or **react-native-svg** (both work on web and native).
 - **Route demo:** interpolates between the poses from the beta solver, with simple 2D inverse kinematics so limbs bend naturally while the hands/feet stay on holds. Proportions match the user.
 - **Correction ghost:** takes the user's *actual* pose at the key moment, applies the correction spec (§5.4) through IK, and shows a translucent accent-colored figure moving from "your position" to "better position." A legend makes it clear: **solid = you, ghost = better.**
-- **Why not 3D yet:** a believable 3D avatar on a wall needs the wall's 3D shape (a single photo doesn't capture it), full-body motion generation, and a 3D engine that runs well in mobile browsers. That's months of specialist work, and the 2D version tests whether people *value* the avatar at all. Phase 3 can upgrade to 3D (e.g. React Three Fiber + an avatar rig) if testers love it.
+- **Why not 3D yet:** a believable 3D avatar on a wall needs the wall's 3D shape (a single photo doesn't capture it), full-body motion generation, and a 3D engine that runs well in mobile browsers. That's months of specialist work, so it can't block Phase 1.
+- **3D track (in progress, parallel):** 3D R&D (e.g. React Three Fiber + an avatar rig) runs alongside the 2D build. To keep it cheap to swap in later:
+  - The body model, poses, and correction specs in `src/avatar/` stay **renderer-agnostic** (joint data, not drawing code). The 2D and 3D renderers are interchangeable views over the same data.
+  - Prototype 3D behind a feature flag. It replaces 2D only when it loads fast in mobile Safari and testers prefer it.
 
-### 5.6 Coaching safety & tone tests 🔶 DECISION
+### 5.6 Coaching safety & tone tests
 LLM output is user-facing coaching, so it gets its own test suite in `worker/eval/coach/`, separate from accuracy evals.
 
-- **Golden set (~40 cases):** profile + metrics + key frames + expected constraints. Includes **adversarial cases**: user with weight entered, stated injuries (knee, shoulder, finger pulley), a beginner on a far-above-grade problem, a short climber on a reachy problem, and **prompt injection in free-text fields** (e.g. `injuries` containing "ignore previous instructions").
+- **Golden set (~40 cases):** profile + metrics + key frames + expected constraints. Includes **adversarial cases**: a user who mentions their weight in free text, a 13–17-year-old user, stated injuries (knee, shoulder, finger pulley), a beginner on a far-above-grade problem, a short climber on a reachy problem, and **prompt injection in free-text fields** (e.g. `injuries` containing "ignore previous instructions").
 - **Hard checks (automated, must pass 100%):**
   - Output validates against `shared/schemas/feedback` JSON Schema.
   - At most 3 key moments, at least 1 positive, exactly 1 drill.
-  - No weight/body-shape language (`weight`, `kg`, `lbs`, `heavy`, `fat`, `skinny`, etc.) unless the user explicitly asked.
+  - No weight/body-shape language (`weight`, `kg`, `lbs`, `heavy`, `fat`, `skinny`, etc.), ever.
   - Never uses "optimal," "best," or "correct beta."
   - Stated injuries are respected (e.g. knee injury → no drop-knee or heel-hook corrections).
   - No suggestion more than ~2 V-grades of difficulty above the user's level framed as required.
@@ -255,7 +261,7 @@ wingspan_cm = height_cm × (fingertip-to-fingertip span in pixels ÷ head-top-to
   - **Pose keypoints** (same pose model as §5.3) to **check the pose is valid**: arms roughly horizontal (within ~15°), elbows straight (angle > 160°), body facing the camera (shoulder width plausible vs height), feet visible, standing upright.
 - **Corrections:** small tilt correction if the phone was rotated. Exclude hair volume at the top of the head where possible.
 - **Sanity checks:** reject if the resulting ape index is outside about **−10 cm to +15 cm**, which is outside the normal human range and means the photo is probably wrong. Then ask for a retake.
-- **Expected accuracy:** roughly **±3–5 cm** with a good photo. Perspective and slightly bent arms are the main error sources. That's good enough for beta sequencing (reach limits have margin anyway), and the UI lets users fine-tune with the slider. 🔶 DECISION: show the result as "≈", never as an exact measurement.
+- **Expected accuracy:** roughly **±3–5 cm** with a good photo. Perspective and slightly bent arms are the main error sources. That's good enough for beta sequencing (reach limits have margin anyway), and the UI lets users fine-tune with the slider. Always show the result as "≈", never as an exact measurement.
 - **Where it runs:** the AI worker (same pipeline as the other jobs, `kind='wingspan_estimate'`), so it works the same on web and native. Phase 2 option: run on the device for speed and privacy.
 - **Store:** `wingspan_cm`, `wingspan_source` (`photo` / `manual` / `default`), and a confidence value. **Not the photo.**
 - **Test set:** 20 people with **tape-measured** wingspans. Target median error ≤ 4 cm before launch. Add this to `worker/eval`.
@@ -286,18 +292,33 @@ Platform widgets (system alerts, `Switch`, native pickers) look different on web
 - Scale (mirrors iOS text styles): `largeTitle 34/41 bold` · `title2 22/28 bold` · `headline 17/22 semibold` · `body 17/22` · `subhead 15/20` · `footnote 13/18` · `numeric` = tabular figures for grades, timestamps, scores.
 - Respect accessibility text size (cap ~1.4× in dense overlays).
 
-### 6.4 Color 🔶 DECISION
-Granite, chalk, and climbing tape. Neutral UI with one accent. Overlays need **maximum visibility on busy, colorful gym walls**.
+### 6.4 Color
+**Three-color brand: cream, ink, tape orange.** Overlays need **maximum visibility on busy, colorful gym walls**.
+
+| Brand color | Hex | Role |
+|---|---|---|
+| **Cream** | `#F4EFE6` | Light-mode background · dark-mode text |
+| **Ink** | `#141414` | Light-mode text · dark-mode background · text on orange |
+| **Tape orange** | `#FF5A1F` | The single accent: primary buttons, capture button, ghost avatar. Same in both modes |
+
+**Color rules:**
+- Text on orange is **always ink**, never white (ink on orange ≈ 6:1 contrast, white fails).
+- **Never orange body text.** Orange is for fills and shapes, not reading.
+- White `#FFFFFF` is used **only for cards on top of the cream background**, never as a page background.
+- Dark mode flips cream and ink. Orange stays the same.
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `bg` | `#F7F6F3` | `#0E0F11` | App background |
-| `surface` | `#FFFFFF` | `#1A1C1F` | Cards, sheets |
-| `surfaceAlt` | `#EFEDE8` | `#24272B` | Inputs, chips |
-| `textPrimary` | `#15171A` | `#F4F3F0` | Text |
-| `textSecondary` | `#5E636B` | `#A3A8B0` | Metadata |
-| `accent` | `#FF5A1F` | `#FF6A33` | Primary actions, capture button, ghost avatar |
-| `success` / `warning` / `danger` | `#1F9D55` / `#C98A00` / `#D92D20` | `#34C26F` / `#F2B233` / `#F2574B` | Status |
+| `bg` | `#F4EFE6` cream | `#141414` ink | App background |
+| `surface` | `#FFFFFF` | `#1F1E1C` | Cards, sheets |
+| `surfaceAlt` | `#EAE3D6` | `#2A2926` | Inputs, chips |
+| `textPrimary` | `#141414` ink | `#F4EFE6` cream | Text |
+| `textSecondary` | `#5C574F` | `#B5AEA2` | Metadata |
+| `accent` | `#FF5A1F` | `#FF5A1F` | Primary actions, capture button, ghost avatar |
+| `onAccent` | `#141414` | `#141414` | Text/icons on orange |
+| `success` / `warning` / `danger` | `#1F9D55` / `#C98A00` / `#D92D20` | `#34C26F` / `#F2B233` / `#F2574B` | Status only (icons, badges), not brand |
+
+The derived tokens (`surface` in dark mode, `surfaceAlt`, `textSecondary`) are tints of cream and ink, so the brand stays three colors.
 
 **Overlay palette** (used on top of photos/video, always with a **dark outline + soft shadow** so they read on any wall color):
 
@@ -345,7 +366,7 @@ Bottom tab bar, with capture in the center:
 |---|---|---|
 | 1 | Welcome | Value prop: "See the beta. Fix your technique." · Get started · "Test version, thanks for helping" |
 | 2 | Sign in | Email → 6-digit code |
-| 3–6 | Onboarding (4 steps) | ① Height + wingspan (photo estimate / type in / skip, live avatar preview) ② Experience + grade ③ Style + goals ④ Optional: weight, injuries, with clear "why we ask" text |
+| 3–6 | Onboarding (4 steps) | ① Height + wingspan (photo estimate / type in / skip, live avatar preview) ② Experience + grade ③ Style + goals ④ Optional: injuries/limitations, with clear "why we ask" text, plus the training-data opt-in (hidden for under-18s) |
 | 7 | Add to Home Screen guide | Web only, iPhone Safari, shown once |
 | 8 | Capture: Route photo | Camera + framing guide overlay |
 | 9 | Route: holds detected | Photo, hold outlines, color picker chips, tap to add/remove, mark start/top, scale slider |
@@ -373,7 +394,7 @@ Bottom tab bar, with capture in the center:
 | Photo/video capture | **expo-image-picker** (Phase 1, works on web) → **expo-camera** (Phase 2 native, adds a live framing guide) | |
 | Media prep | **expo-image-manipulator** for photos (max 2048 px, strips location metadata). Video: client-side length limit + trim metadata. Server-side **ffmpeg** handles transcoding/downscaling to 720p | |
 | Backend | **Supabase**: Auth (email code), Postgres, Storage, Realtime, Edge Functions | One service, Row Level Security, free tier to start |
-| AI worker | **Python + FastAPI** on **Modal** (serverless GPU, pay per second) 🔶 DECISION | No server to manage, scales to zero when idle (so ~$0 when nobody is using it). Alternatives: Replicate, RunPod |
+| AI worker | **Python + FastAPI** on **Modal** (serverless GPU, pay per second) | No server to manage, scales to zero when idle (so ~$0 when nobody is using it). Alternatives: Replicate, RunPod |
 | CV/ML | **Ultralytics YOLO** (holds), pose model per §5.3, **OpenCV**, **NumPy** | Proven, well-documented |
 | LLM | **Anthropic API (Claude)** with structured JSON output | Vision + strong instruction following. Behind an interface so it can be swapped |
 | Server state | **TanStack Query** · local state **Zustand** | |
@@ -396,6 +417,10 @@ profiles (
   styles jsonb,                             -- strengths/weaknesses
   goals text[],
   dominant_hand text,
+  birth_year int not null,                  -- age gate; never displayed
+  guardian_email text,                      -- required if under 18
+  guardian_consent_at timestamptz,          -- null → minor account stays limited
+  training_data_opt_in boolean default false, -- forced false for under-18s
   onboarding_completed_at timestamptz,
   created_at timestamptz default now()
 )
@@ -408,7 +433,6 @@ body_profiles (
   wingspan_source text default 'default'    -- 'photo' | 'manual' | 'default'
     check (wingspan_source in ('photo','manual','default')),
   wingspan_confidence numeric,              -- 0–1, photo estimates only
-  weight_kg numeric,                        -- optional, never displayed
   injuries text,                            -- optional
   updated_at timestamptz default now()
 )
@@ -437,7 +461,7 @@ route_scans (
 technique_reviews (
   id uuid pk,
   user_id uuid, route_scan_id uuid null,
-  video_path text,                          -- raw video: auto-deleted after 30 days 🔶
+  video_path text,                          -- raw video: auto-deleted after 30 days
   duration_s numeric, trim_start_s numeric, trim_end_s numeric,
   pose_path text,                           -- keypoints file in storage (JSON/binary)
   pillar_scores jsonb,                      -- {footwork: 72, ...}
@@ -455,16 +479,21 @@ app_feedback (id, user_id, message, screenshot_path, app_version, platform, crea
 
 ## 10. Privacy, safety, and trust
 
-- **Body data is sensitive.** Collect only what's useful. Weight and injuries are optional with a clear "why." It's never shown publicly, never sent to analytics, and goes to the LLM **only when relevant** (height/wingspan yes, weight rarely, injuries only as "avoid X").
-- **Videos show people's bodies and faces.** Private by default. Raw videos are auto-deleted after **30 days** (pose data and feedback are kept), with a user setting to keep longer or delete immediately. 🔶 DECISION. Other people in the frame: the recording guide asks users to film only themselves.
+- **Body data is sensitive.** Collect only what's useful. **Weight is not collected at all.** Injuries are optional with a clear "why." Body data is never shown publicly, never sent to analytics, and goes to the LLM **only when relevant** (height/wingspan yes, injuries only as "avoid X").
+- **Videos show people's bodies and faces.** Private by default. Raw videos are auto-deleted after **30 days** (pose data and feedback are kept), with a user setting to keep longer or delete immediately. Other people in the frame: the recording guide asks users to film only themselves.
 - **Wingspan photos are never kept.** They're uploaded to a short-lived private path, measured, then **deleted immediately** (plus a storage rule that auto-deletes anything left in that path after 1 hour as a safety net). Never used for training, even with opt-in. The result screen says: "Your photo has been deleted. We only kept the measurement."
 - **Strip location metadata** from all uploaded media.
 - **No body shaming, no weight advice.** It's in the LLM system prompt and covered by tests (§5.6).
 - **Injury disclaimer:** a one-time acknowledgment in onboarding ("Climbing has risk. Suggestions are guidance, not guarantees. Climb within your limits") plus a small "suggested" label on all beta.
 - **Account and data deletion** in-app (Apple requires it, and it's the right thing to do).
 - **Privacy policy + terms** linked in onboarding (required for TestFlight/App Store, so write simple ones in Phase 1).
-- **Testers 18+** in Phase 1. 🔶
-- **AI data use:** state clearly whether uploaded photos/videos are used to improve the models. 🔶 DECISION: **opt-in** checkbox during onboarding, off by default. Builds trust, and still yields training data from willing users.
+- **Minimum age 13.** Under-13s are blocked at sign-up (birth-year question), which keeps the app outside COPPA.
+- **Ages 13–17 need parental/guardian consent:** a guardian email gets a consent link, and the account stays limited until it's confirmed. For minors:
+  - The training-data opt-in is **not offered** (always off).
+  - Raw videos use the **30-day auto-delete with no "keep longer" option**.
+  - No future social/public features without separate guardian consent.
+  - Store `birth_year` and `guardian_consent_at` on the profile. **Get a quick legal review of the consent flow and privacy policy before minors join the test** (rules vary by state and country, e.g. GDPR age-of-consent in the EU).
+- **AI data use:** an **opt-in** checkbox during onboarding (adults only), off by default, explaining clearly how uploaded photos/videos would be used to improve the models.
 
 ---
 
@@ -533,7 +562,8 @@ cruxshot/
 
 ### Phase 0: Foundation (you only)
 - [ ] Try competitors → `docs/competitors.md`
-- [ ] Find a **partner gym** + one strong climber/setter to help label the test set
+- [x] Secure a **partner bouldering gym** + one strong climber/setter to help label the test set
+- [ ] Parental-consent flow for 13–17 + legal review of privacy policy/terms (§10)
 - [ ] Scaffold app, theme tokens, UI primitives, tab bar
 - [ ] Supabase schema + RLS + storage
 - [ ] Auth + 4-step onboarding with live avatar preview (**this builds the avatar body model early**)
@@ -574,7 +604,7 @@ cruxshot/
 ### Phase 3: Launch & beyond
 - [ ] App Store / Google Play
 - [ ] Monetization (§14)
-- [ ] 3D avatar, social beta sharing, gym/setter tools, outdoor rock
+- [ ] Ship the 3D avatar (if R&D proves out), social beta sharing, gym/setter tools
 
 ---
 
@@ -593,10 +623,10 @@ cruxshot/
 
 **Per-analysis cost will be real money at scale.** Track it in the `jobs` table (GPU seconds + LLM tokens) from day one.
 
-### Business model 🔶 DECISION (to validate, not build in Phase 1)
-- **Freemium:** a few free Route Reads + Technique Reviews per month, then a subscription (~$5–10/mo). This is the norm among competitors (several use subscriptions or token packs).
-- **Later B2B:** gyms pay for setter tools / member perks.
-- **In Phase 1, ask testers** "what would you pay?" instead of building payments.
+### Business model
+- **No monetization plan yet.** The app is free through Phase 1 and Phase 2. Focus on the product.
+- **Still, collect the evidence a startup needs:** in Phase 1, ask testers "what would you pay?" and track per-analysis cost (above), so the decision is easy later.
+- **Options to evaluate before launch:** freemium subscription (the norm among competitors), gym licensing (B2B), or both.
 
 ---
 
@@ -617,16 +647,31 @@ cruxshot/
 
 ---
 
-## 16. Open questions for the founder
+## 16. Decisions log (finalized November 2026)
 
-1. **Which gym will you partner with,** and do you know a setter or strong climber who could help label photos and judge the AI's output? *(The biggest factor in AI quality.)*
-2. **Which feature is the hero?** Route Reader or Technique Review: if testers only remembered one, which should it be? *(It decides what gets polished first. Default plan: build both, prototype both in Phase 0.5, lead with whichever tests better.)*
-3. **What will make Cruxshot better than the existing apps** (§2)? Do the proposed differentiators match your vision?
-4. **Wingspan photo:** any objection to it working only with full-body photos (head to toe in frame)? The math depends on knowing the user's height in the photo. Alternatives like a selfie with arms out won't work.
-5. **Is weight important to you?** Plan: optional and barely used. Weight has little effect on beta, and asking can put people off.
-6. **Real app name?** Check App Store, domain, and trademark.
-7. **Business intent:** side project, startup, or portfolio piece? *(It changes how much to invest in polish vs speed.)*
-8. **Opt-in for training data:** comfortable with off-by-default, or do you want it on with clear disclosure?
+| Decision | Final call |
+|---|---|
+| Scope | **Indoor bouldering gyms only.** No outdoor, no ropes |
+| Partner gym | Secured, plus a strong climber/setter |
+| Project intent | **Startup** |
+| Weight | **Not collected** |
+| Route selection | Assisted (tap a hold color, adjust, mark start/top) |
+| Max video length | 60 seconds |
+| Avatar | 2D ships in Phase 1. 3D R&D runs in parallel (§5.5) |
+| Hero feature | Decide after testing: build and test both, polish the winner |
+| Differentiators | Keep all three (§2) |
+| Raw video retention | 30 days, then auto-delete |
+| Minimum age | 13+. Ages 13–17 need parental consent (§10) |
+| Training data | Opt-in, off by default, adults only |
+| Wingspan display | Approximate (≈) with an adjust slider |
+| AI hosting | Modal |
+| Brand colors | Cream `#F4EFE6` · Ink `#141414` · Tape orange `#FF5A1F` (§6.4) |
+| Business model | None yet, free through Phase 2 (§14) |
+| Engineering defaults | Accepted as written in `CLAUDE.md` |
+
+**Still open:**
+1. **Real app name.** "Cruxshot" is a working name. Check App Store, domain, and trademark.
+2. **Wingspan photo needs a full-body shot** (head to toe in frame), because the math depends on knowing the user's height in the photo. Flag it if that's a problem.
 
 ---
 

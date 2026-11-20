@@ -3,7 +3,7 @@
 Operating manual for AI assistants in this repo. **Product truth lives in `PROJECT_CONTEXT.md`** (read the relevant § before building a feature). This file covers *how* to work here. If the two conflict, `PROJECT_CONTEXT.md` wins for product decisions and this file wins for engineering conventions. Flag the conflict, don't silently pick.
 
 ## Project in one paragraph
-**Cruxshot** (repo: `climbr`) is an AI climbing coach for indoor boulderers. Route Reader: wall photo → hold detection → body-aware suggested beta (numbered dots + 2D avatar). Technique Review: climbing video → pose tracking → 3 timestamped key moments + ghost-avatar correction. Climber Profile: height/wingspan/level drive all personalization. Expo/React Native (TypeScript) app shipped as a mobile **web PWA first**, native later. Python AI worker on Modal. Supabase for auth/db/storage/realtime.
+**Cruxshot** (repo: `climbr`, working name) is a startup building an AI climbing coach for **indoor bouldering gyms only** (no outdoor, no ropes). Route Reader: wall photo → hold detection → body-aware suggested beta (numbered dots + 2D avatar). Technique Review: climbing video → pose tracking → 3 timestamped key moments + ghost-avatar correction. Climber Profile: height/wingspan/level drive all personalization. Expo/React Native (TypeScript) app shipped as a mobile **web PWA first**, native later. Python AI worker on Modal. Supabase for auth/db/storage/realtime.
 
 ## Current status
 **Pre-scaffold.** Only docs exist. Next milestone = Phase 0 (`PROJECT_CONTEXT.md` §13, kickoff prompt §17). Update this section and **Commands** as soon as things change.
@@ -28,7 +28,7 @@ Repo root **is** the monorepo root from §11 (ignore the `cruxshot/` prefix ther
 > Planned, verify after scaffolding and correct here.
 
 ```bash
-# App (root) — npm is the package manager 🔶
+# App (root) — npm is the package manager
 npm install
 npx expo start              # dev server (press w for web)
 npx expo start --tunnel     # HTTPS-ish URL for phone camera testing
@@ -44,7 +44,7 @@ npx supabase migration new <name>
 npx supabase db reset       # re-apply all migrations + seed locally
 npx supabase test db        # pgTAP tests (RLS)
 
-# Worker (worker/) — Python 3.11+, uv 🔶
+# Worker (worker/) — Python 3.11+, uv
 uv sync
 uv run ruff check . && uv run ruff format --check .
 uv run pytest
@@ -59,13 +59,16 @@ uv run modal serve app.py   # dev deploy; `modal deploy app.py` for prod
 4. **`shared/schemas/` is the only contract.** Change a schema → regenerate types → update app + worker in the **same commit**.
 5. **Secrets:** only `EXPO_PUBLIC_*` values in the app (Supabase URL + anon key). Service-role, Anthropic, and Modal keys live only in worker/Supabase secrets. Never commit `.env`.
 6. **RLS on every table, always.** Every new table ships with policies **and** a pgTAP test proving another user can't read it.
-7. **Body data** (`body_profiles`, wingspan photos): never logged, never in analytics/Sentry breadcrumbs, sent to the LLM only per §10. Wingspan photos are deleted right after measuring.
-8. **Copy:** beta is always "suggested," never "optimal/best/correct." Never mention weight in coaching. Coaching copy has at least one positive and at most 3 improvements.
-9. **Every AI screen** handles loading (real progress), low confidence, failure + retry, and empty.
-10. **Model/prompt changes** require a before/after `worker/eval` run in the PR description.
+7. **Body data** (`body_profiles`, birth year, wingspan photos): never logged, never in analytics/Sentry breadcrumbs, sent to the LLM only per §10. Wingspan photos are deleted right after measuring. **Weight is not collected**, so don't add a field for it.
+8. **Copy:** beta is always "suggested," never "optimal/best/correct." Never mention weight or body shape in coaching. Coaching copy has at least one positive and at most 3 improvements.
+9. **Minors (13–17):** no training-data opt-in, no "keep video longer," limited account until guardian consent. Under-13s are blocked. Check `birth_year` server-side (RLS/Edge Function), not just in the UI.
+10. **Brand colors:** cream `#F4EFE6` / ink `#141414` / orange `#FF5A1F`. Ink text on orange (never white), never orange body text, white only for cards on cream (§6.4).
+11. **Every AI screen** handles loading (real progress), low confidence, failure + retry, and empty.
+12. **Model/prompt changes** require a before/after `worker/eval` run in the PR description.
+13. **Avatar data is renderer-agnostic.** `src/avatar/` holds joints, poses, and corrections only, so the 2D renderer (Phase 1) and the 3D renderer (parallel R&D, feature-flagged) share it.
 
-## Engineering conventions 🔶 (filled-in defaults: confirm or change)
-- **Units:** store **metric only** (cm, kg) in DB, schemas, and worker. Convert to imperial only at the UI edge (`src/lib/units.ts`).
+## Engineering conventions (accepted)
+- **Units:** store **metric only** (cm) in DB, schemas, and worker. Convert to imperial only at the UI edge (`src/lib/units.ts`).
 - **Image coordinates:** **normalized 0–1** relative to the *uploaded* image (x right, y down). Never raw pixels in schemas, so resizing on either side doesn't break overlays.
 - **Video time:** seconds (float) from the start of the **original** video; trim is metadata, not re-encoding, on the client.
 - **Pose keypoints:** COCO-17 order, `[x, y, confidence]` normalized, sampled at a fixed fps stored with the file.
