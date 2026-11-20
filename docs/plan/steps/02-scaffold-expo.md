@@ -13,7 +13,8 @@ An Expo + TypeScript + Expo Router app lives at the repo root and shows a placeh
 - `docs/dev/setup-windows.md` (commands)
 
 ## In scope
-- Scaffold **at the repo root** (decision C3), not in a subfolder. Latest stable Expo SDK, Expo Router, TypeScript.
+- Scaffold **at the repo root** (decision C3), not in a subfolder. Latest stable Expo SDK, Expo Router, TypeScript. Don't let the scaffolder overwrite `.gitignore`, `.gitattributes`, `.env.example`, `CLAUDE.md`, or `docs/` (scaffold into a temp folder and copy in if needed).
+- Verify Metro bundles through the OneDrive `node_modules` junction from step 01 (web + Expo Go). If it fails, follow the fallback in `docs/dev/setup-windows.md` and note it there.
 - `tsconfig.json`: `strict: true`, `@/` path alias → `src/`.
 - ESLint + Prettier; scripts `lint`, `typecheck`, `test` (jest-expo + React Native Testing Library) with one trivial passing test.
 - Empty folders from the layout with `.gitkeep` only where needed (`src/components/ui`, `src/theme`, `src/lib`, `src/avatar`, `src/features`).

@@ -40,14 +40,20 @@ uv run modal serve app.py   # dev deploy; `modal deploy app.py` for prod
 ```
 
 ## Windows / environment gotchas
-- **Repo is inside OneDrive** and stays there (decision O3). OneDrive syncing `node_modules`, `.venv`, `.expo`, and Metro caches causes file-lock errors and slow installs. **Keep them out of sync.** OneDrive has no simple per-folder "ignore" for folders inside a synced tree (*Free up space* only removes local copies, it still syncs). A common workaround is to make those folders junctions that point outside OneDrive. Check afterwards that OneDrive shows no sync activity for them:
-  ```powershell
-  # run from the repo root BEFORE the first npm install / uv sync
-  New-Item -ItemType Directory -Force C:\dev-cache\cruxshot\node_modules, C:\dev-cache\cruxshot\worker-venv | Out-Null
-  cmd /c mklink /J node_modules C:\dev-cache\cruxshot\node_modules
-  cmd /c mklink /J worker\.venv C:\dev-cache\cruxshot\worker-venv
-  ```
-  If you still see `EBUSY`/`EPERM` errors, pause OneDrive syncing while installing.
+- **Repo is inside OneDrive** and stays there (decision O3). OneDrive syncing `node_modules`, `.venv`, `.expo`, and Metro caches causes file-lock errors and slow installs. **Keep them out of sync.** OneDrive has no simple per-folder "ignore" for folders inside a synced tree (*Free up space* only removes local copies, it still syncs). A common workaround is to make those folders junctions that point outside OneDrive. Check afterwards that OneDrive shows no sync activity for them.
+  - **`node_modules`** (step 01, before the first `npm install`):
+    ```powershell
+    New-Item -ItemType Directory -Force C:\dev-cache\cruxshot\node_modules | Out-Null
+    cmd /c mklink /J node_modules C:\dev-cache\cruxshot\node_modules
+    ```
+    Use `npm install`, not `npm ci` (`npm ci` deletes `node_modules` and can remove the junction). Step 02 verifies Metro resolves modules through the junction; if it doesn't, remove the junction and pause OneDrive during installs instead.
+  - **`worker\.venv`** (step 16, after `worker/` exists): let uv create the venv in the cache folder first, then junction to it, so uv always sees a valid environment:
+    ```powershell
+    uv venv C:\dev-cache\cruxshot\worker-venv --python 3.11
+    cmd /c mklink /J worker\.venv C:\dev-cache\cruxshot\worker-venv
+    ```
+  - `.expo/` is small; Metro's cache lives in `%TEMP%` (outside OneDrive) by default.
+  - If you still see `EBUSY`/`EPERM` errors, pause OneDrive syncing while installing.
 - `C:\Users\colby` may itself be a git repo (likely accidental). Run git commands from the repo root and check `git rev-parse --show-toplevel` so you don't commit to the wrong one.
 - Supabase local dev and pgTAP need **Docker Desktop** (WSL2 backend).
 - Skia's web build is ~MBs of WASM. Measure first-load on a real phone before committing to it (plan step 10).
