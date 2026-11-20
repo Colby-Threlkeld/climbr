@@ -12,7 +12,7 @@
 - `docs/dev/setup-windows.md` (worker commands)
 
 ## In scope
-- Set up the OneDrive-safe `worker\.venv` junction per `docs/dev/setup-windows.md` before the first `uv sync`.
+- No `worker\.venv` junction needed: the repo moved out of OneDrive in step 02 (decision O3, revised).
 - `uv init` in `worker/`, `pyproject.toml` with FastAPI, Modal, Pydantic v2; dev deps Ruff, pytest.
 - `worker/app.py`: FastAPI app + Modal entrypoint; `GET /health`.
 - Empty packages per layout (`holds/`, `beta/`, `pose/`, `technique/`, `coach/`, `ghost/`, `body/`, `eval/`, `schemas/`, `notebooks/`, `tests/fixtures/`).

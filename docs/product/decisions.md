@@ -35,7 +35,7 @@ These resolve contradictions and gaps found when the spec was split. IDs (C = co
 | C2 | Python lint **and** format with **Ruff only** (no Black). |
 | C3 | The Expo app is scaffolded **at the repo root**. There is no `cruxshot/` subfolder. |
 | C10 | Web hosting is **Vercel**. |
-| O3 | The repo **stays in OneDrive**. Exclude `node_modules`, `.venv`, `.expo`, Metro caches, and `worker/.venv` from OneDrive sync (see `docs/dev/setup-windows.md`). |
+| O3 | ~~The repo stays in OneDrive.~~ **Superseded Nov 2026 (step 02):** the repo lives **outside OneDrive** at `C:\dev\cruxshot`; GitHub is the backup. Reason: npm deletes a `node_modules` junction on every install ("Removing non-directory"), so there was no reliable way to keep `node_modules` out of OneDrive sync. |
 
 ### Data and contracts
 | ID | Decision |
