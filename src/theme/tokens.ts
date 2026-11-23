@@ -25,6 +25,7 @@ export const colors = {
     success: '#1F9D55',
     warning: '#C98A00',
     danger: '#D92D20',
+    scrim: 'rgba(20, 20, 20, 0.4)', // ink at 40%: dims the screen behind sheets
   },
   dark: {
     bg: brand.ink,
@@ -37,7 +38,13 @@ export const colors = {
     success: '#34C26F',
     warning: '#F2B233',
     danger: '#F2574B',
+    scrim: 'rgba(0, 0, 0, 0.6)', // darker in dark mode so the sheet edge still reads
   },
+} as const;
+
+// Soft elevation for floating surfaces (toast, slider thumb). `boxShadow` works on web and native.
+export const shadow = {
+  raised: '0px 4px 12px rgba(20, 20, 20, 0.18)',
 } as const;
 
 export type ColorScheme = keyof typeof colors;
@@ -94,6 +101,15 @@ export const touch = {
   capture: 76,
 } as const;
 
+// Fixed component dimensions that aren't on the spacing grid.
+export const size = {
+  sheetHandle: { width: 36, height: 5 },
+  sliderTrack: 4,
+  sliderThumb: 28, // visual size; the touch area is still touch.min
+  progressBar: 4,
+  stageDot: 24,
+} as const;
+
 // --- Typography ---
 // Decision G11: the CSS stack only works on web. On native, leaving fontFamily unset
 // gives the platform system font (SF Pro on iOS, Roboto on Android).
@@ -125,4 +141,5 @@ export const motion = {
   screen: 250,
   sheet: 300, // spring, ~300 ms
   avatarMove: 800, // default per-move speed, user-adjustable later
+  toast: 4000, // how long a toast stays on screen
 } as const;

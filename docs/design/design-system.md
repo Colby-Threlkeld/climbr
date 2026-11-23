@@ -74,6 +74,9 @@ Hands vs feet are distinguished by **shape, not just color** (colorblind-safe), 
 - Radii: 10 (inputs/chips), 14 (cards, buttons), 20 (sheets), full (capture button).
 - Borders: 1 (hairline), 2 (focus/error ring). Opacity: 0.7 pressed, 0.4 disabled.
 - Selected chips/segments invert (ink fill + cream text in light mode). Orange stays reserved for primary actions.
+- Scrim behind sheets: ink at 40% (light) / black at 60% (dark). Raised shadow for toasts and slider thumb: `0 4px 12px` ink at 18%.
+- Fixed sizes: sheet handle 36×5, slider track 4, slider thumb 28 (touch area still 48), progress bar 4, stage dot 24.
+- Toasts appear at the **top** (below the notch) so they never cover bottom actions, and stay 4 s. Status color goes on the dot, never the text.
 - **Minimum touch target 48 pt** everywhere (decision C5). Capture button 76 pt. Tappable holds are expanded to at least 48 pt hit areas even when the hold is small.
 - Primary actions at the **bottom**. Respect safe areas (notch/home indicator) on web too.
 

@@ -16,7 +16,7 @@ Status: ⬜ not started · 🟨 in progress · ✅ done · ⏸ blocked
 | 02 | [Scaffold Expo app + CI](steps/02-scaffold-expo.md) | 01 | ✅ |
 | 03 | [Theme tokens + typography](steps/03-theme-tokens.md) | 02 | ✅ |
 | 04 | [UI primitives I + dev gallery](steps/04-ui-primitives-1.md) | 03 | 🟨 |
-| 05 | [UI primitives II](steps/05-ui-primitives-2.md) | 04 | ⬜ |
+| 05 | [UI primitives II](steps/05-ui-primitives-2.md) | 04 | 🟨 |
 | 06 | [Tab shell](steps/06-tab-shell.md) | 05 | ⬜ |
 | 07 | [Supabase: profiles, body_profiles, locations + RLS](steps/07-supabase-profiles.md) | 02 | ⬜ |
 | 08 | [Auth: welcome + email code](steps/08-auth.md) | 06, 07 | ⬜ |
