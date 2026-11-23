@@ -5,7 +5,7 @@
 ## One-time install
 1. Install **Node.js LTS**, **Git**, **VS Code**, **Python 3.11+**, and **uv** (`powershell -c "irm https://astral.sh/uv/install.ps1 | iex"`). **No Docker Desktop** (decision D2).
 2. App is scaffolded **at the repo root** (decision C3), in plan step 02.
-3. Create a free **Supabase** project as the **dev** database (decision D2). Put the URL + anon key in `.env` (copy from `.env.example`). Run `npx supabase login` once, then `npx supabase link --project-ref <ref>` in the repo root (the ref is in the project URL).
+3. Create a free **Supabase** project as the **dev** database (decision D2). Put the URL + **publishable key** in `.env` (copy from `.env.example`). Run `npx supabase login` once, then `npx supabase link --project-ref <ref>` in the repo root (the ref is in the project URL).
 4. Worker: `cd worker; uv sync`. Create **Modal** and **Anthropic** accounts. API keys go **only** in the worker's secrets (Modal secrets), never in the app.
 5. Develop the worker **locally on CPU first** (slow but fine for testing). Deploy to Modal GPU when it works.
 6. Install **Expo Go** on your own phone for native checks (**developer only**).
