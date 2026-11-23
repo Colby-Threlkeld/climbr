@@ -69,6 +69,26 @@ Hands vs feet are distinguished by **shape, not just color** (colorblind-safe), 
 
 - **Contrast:** WCAG AA minimum for all text. Dark mode from day one.
 
+## Materials (glass), decision D1
+
+Glass is for **chrome that floats over a photo or video**, never for content.
+
+| Material | Light | Dark | Use |
+|---|---|---|---|
+| `glass.regular` | cream at 72%, blur 60 | ink at 76%, blur 60 | Toasts, tab bar (step 06), short sheets over media |
+| `glass.thin` | cream at 65%, blur 40 | ink at 70%, blur 40 | Small floating controls (`Button variant="glass"`) |
+| `solid` | `surface` | `surface` | Fallback, Reduce Transparency, everything else |
+| `sheen` | 1-pt white inset at 60% | at 14% | Top edge of glass; the **only** glass touch allowed on the orange primary button |
+
+**Rules:**
+- **Use:** tab bar, toasts, back/close/legend/scrubber controls over media, short sheets over media.
+- **Don't use:** cards, forms (text fields, chips, segmented controls), progress lists, body text, default sheets (they hold forms).
+- **Only `textPrimary` text on glass.** `textSecondary` fails AA over worst-case backdrops (tested in `src/theme/__tests__/material-test.ts`).
+- **Alpha floor:** light ≥ 0.65, dark ≥ 0.70. With that tint alone, main text passes AA even over pure black or white with no blur. The floor is needed because iPhone Safari can't report Reduce Transparency.
+- **Glass can't be dimmed.** Apple's glass disappears at opacity < 1, so glass controls show a press with a 0.97 scale, not opacity.
+- **Platforms:** Liquid Glass on iOS 26+, frosted blur on older iOS, web, and Android 12+, tint only on Android < 12, solid with Reduce Transparency (iOS setting, `prefers-reduced-transparency` on Chrome/Android).
+- **Android:** wrap the media behind glass in `<GlassBackdrop>` or it won't blur. Glass sheets show the tint only on Android, because a Modal is a separate window.
+
 ## Spacing, shape, touch
 - 8-pt grid (4, 8, 12, 16, 20, 24, 32, 40). Screen padding 16.
 - Radii: 10 (inputs/chips), 14 (cards, buttons), 20 (sheets), full (capture button).

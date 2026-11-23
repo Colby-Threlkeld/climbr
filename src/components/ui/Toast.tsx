@@ -16,6 +16,7 @@ import { motion, radii, shadow, spacing, touch } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
 import { Button } from './Button';
+import { Material } from './Material';
 import { Text } from './Text';
 
 export type ToastTone = 'info' | 'success' | 'error';
@@ -89,22 +90,26 @@ function ToastView({ toast, onDismiss }: { toast: ToastState; onDismiss: () => v
         aria-live={tone === 'error' ? 'assertive' : 'polite'}
         accessibilityHint="Tap to dismiss"
         onPress={onDismiss}
-        style={[styles.toast, { backgroundColor: colors.surface, boxShadow: shadow.raised }]}
+        style={[styles.shape, { boxShadow: shadow.raised }]}
       >
-        {/* Status color only on the dot (a badge), never on the text. */}
-        <View style={[styles.dot, { backgroundColor: dotColor }]} aria-hidden />
-        <Text style={styles.message}>{toast.message}</Text>
-        {toast.action ? (
-          <Button
-            label={toast.action.label}
-            variant="ghost"
-            onPress={() => {
-              // Dismiss first: the action may show a new toast, which must not be wiped.
-              onDismiss();
-              toast.action?.onPress();
-            }}
-          />
-        ) : null}
+        {/* Toasts float over whatever screen is underneath, so they're glass (decision D1).
+            Only textPrimary sits on glass; secondary gray fails contrast there. */}
+        <Material variant="regular" style={[styles.shape, styles.toast]}>
+          {/* Status color only on the dot (a badge), never on the text. */}
+          <View style={[styles.dot, { backgroundColor: dotColor }]} aria-hidden />
+          <Text style={styles.message}>{toast.message}</Text>
+          {toast.action ? (
+            <Button
+              label={toast.action.label}
+              variant="ghost"
+              onPress={() => {
+                // Dismiss first: the action may show a new toast, which must not be wiped.
+                onDismiss();
+                toast.action?.onPress();
+              }}
+            />
+          ) : null}
+        </Material>
       </Pressable>
     </Animated.View>
   );
@@ -116,6 +121,7 @@ const styles = StyleSheet.create({
     left: spacing.screen,
     right: spacing.screen,
   },
+  shape: { borderRadius: radii.card },
   toast: {
     minHeight: touch.min,
     flexDirection: 'row',
@@ -123,7 +129,6 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     paddingLeft: spacing.md,
     paddingVertical: spacing.xs,
-    borderRadius: radii.card,
   },
   dot: { width: spacing.xs, height: spacing.xs, borderRadius: radii.full },
   message: { flex: 1, paddingRight: spacing.md },

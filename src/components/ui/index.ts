@@ -2,6 +2,9 @@
 export { Button, type ButtonProps, type ButtonVariant } from './Button';
 export { Card } from './Card';
 export { Chip, type ChipProps } from './Chip';
+export { GlassBackdrop } from './GlassBackdrop';
+export { Material, useMaterialMode } from './Material';
+export type { MaterialMode, MaterialProps, MaterialVariant } from './MaterialSurface';
 export {
   SegmentedControl,
   type SegmentOption,

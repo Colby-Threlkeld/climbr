@@ -15,6 +15,7 @@ import {
   TextField,
   useToast,
 } from '@/components/ui';
+import { MaterialsDemo } from '@/dev/MaterialsDemo';
 import { spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
@@ -69,6 +70,8 @@ function Gallery() {
           Theme: {scheme} (follows the device)
         </Text>
       </View>
+
+      <MaterialsDemo />
 
       <Section title="Button">
         <Button label="Primary" onPress={() => {}} />

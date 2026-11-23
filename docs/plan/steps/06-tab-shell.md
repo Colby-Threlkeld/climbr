@@ -1,6 +1,8 @@
 # Step 06: Tab shell
 
-**Phase:** 0 · **Depends on:** 05 · **Branch:** `feat/tab-shell`
+**Phase:** 0 · **Depends on:** 05b · **Branch:** `feat/tab-shell`
+
+> Tab bar background uses `<Material variant="regular">` (decision D1). Wrap screen content in `<GlassBackdrop>` so Android can blur it.
 
 ## Goal
 The app has a custom bottom tab bar (Home · center Capture · Profile) with placeholder screens, and it looks the same on phone web and Expo Go.

@@ -8,6 +8,8 @@
 | App framework | **React Native + Expo** (latest stable SDK), **Expo Router** | One codebase for web/iOS/Android. Develop on Windows |
 | Web output | Expo web static export → **Vercel** (decision C10) | Free, HTTPS (required for camera on phones), preview URL per push |
 | Overlays/avatar | **@shopify/react-native-skia** (preferred) or **react-native-svg** | Smooth drawing on photos/video, works on web and native. Skia's web build is large, so measure load time and fall back to SVG if needed. Decided by spike step 10 (G12a) |
+| Glass materials | **expo-glass-effect** (Liquid Glass, iOS 26+) + **expo-blur** (frosted blur elsewhere, CSS `backdrop-filter` on web) | Apple-native feel where available, a readable fallback everywhere (decision D1) |
+| Animation / gestures | **react-native-reanimated** 4 + **react-native-gesture-handler** 3 | UI-thread drags and springs (Slider, Sheet), web supported |
 | Video playback | **expo-video** | Web + native. Overlays sync to the current playback time |
 | Photo/video capture | **expo-image-picker** (Phase 1, works on web) → **expo-camera** (Phase 2 native, adds a live framing guide) | |
 | Media prep | **expo-image-manipulator** for photos (max 2048 px, strips location metadata). Video: client-side length limit (raw ≤ 120 s) + trim metadata. Server-side **ffmpeg** handles transcoding/downscaling to 720p | |

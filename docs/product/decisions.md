@@ -65,6 +65,7 @@ These resolve contradictions and gaps found when the spec was split. IDs (C = co
 | G10a | Experience options: **"Under 1 year" (`new`) · "1–3 years" (`1-3y`) · "3+ years" (`3y+`)**. Chosen set was "<1y / 1–2y / 3y+"; the middle label is widened to 1–3 years so there's no 2–3 year gap. |
 | G10b | Grade picker: **V0–V10 plus "V11+"** (Font optional). |
 | G11 | Font stack string is used **on web only**. Native uses the platform default system font (SF Pro on iOS). |
+| D1 | **Glass materials (Nov 2026, step 05b).** Chrome that floats over media uses a token-driven glass material: tab bar, toasts, floating controls (`Button variant="glass"`), and short sheets over media (`Sheet material="glass"`). Content stays solid: cards, forms, chips, progress lists, body text, and default sheets. Rendering differs per platform: **Liquid Glass** (`expo-glass-effect`) on iOS 26+, **frosted blur** (`expo-blur` / CSS `backdrop-filter`) elsewhere, and **solid** with Reduce Transparency. The tokens, layout, and contrast floor are the same everywhere. This refines principle 5 ("web and native match"): they match in **structure and readability**, not pixel-for-pixel. Tint is cream/ink only, with an alpha floor (light ≥ 0.65, dark ≥ 0.70) that keeps `textPrimary` at AA over any backdrop. `textSecondary` is not allowed on glass. The orange primary button stays solid and may only get the top-edge sheen. |
 
 ### Age and consent
 | ID | Decision |

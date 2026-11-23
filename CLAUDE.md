@@ -11,8 +11,16 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 03 done.** **Step 04:** code done; PR #4 brings it to `main` (PR #3 merged into a stale base). Still needs Expo Go checks. **Step 05 in progress** on `feat/ui-primitives-2`, branched from `feat/ui-primitives-1`. Built: Sheet, Toast (`ToastProvider` + `useToast`), Slider, ProgressSteps. Uses Reanimated 4 + Gesture Handler 3, with `GestureHandlerRootView` in `app/_layout.tsx`. 81/81 browser checks pass in headless Edge, including real touch drags, in light, dark and Reduce Motion. Still needed on a real device: Expo Go, haptics, and the iPhone home indicator.
-**Gotchas:** use `aria-*` props, not `accessibilityState` (react-native-web ignores it). Use shared-value `.get()`/`.set()`, not `.value =` (React compiler lint). Jest needs Reanimated's resolver plus `jest.setup.js` mocks. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 06** once 04 and 05 are ✅.
+**Steps 03–04 code is on `main`. Step 05** is in PR #5 (Sheet, Toast, Slider, ProgressSteps; Reanimated 4 + Gesture Handler 3). **Step 05b in progress** on `feat/glass-materials`, branched from 05: glass materials per decision D1 (`Material`, `GlassBackdrop`, `useReduceTransparency`, toast on glass, `Button variant="glass"`, `Sheet material="glass"`). The contrast floor is unit-tested and measured ≥ 6:1 over the gym-wall photo in headless Edge. Still needed on real devices for 04–05b: Expo Go, haptics, home indicator, Liquid Glass on iOS 26, and FPS readings.
+**Gotchas:**
+- Use `aria-*` props, not `accessibilityState` (react-native-web ignores it).
+- Use shared-value `.get()`/`.set()`, not `.value =` (React compiler lint).
+- Jest needs Reanimated's resolver plus the `jest.setup.js` mocks.
+- Never use opacity < 1 on glass; use a scale for press feedback.
+- Pass the corner radius to `Material` itself, not only its parent (web blur corners).
+- The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised).
+
+**Next: step 06** once 05 and 05b are ✅.
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step

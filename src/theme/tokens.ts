@@ -51,6 +51,39 @@ export type ColorScheme = keyof typeof colors;
 export type ColorToken = keyof typeof colors.light;
 export type ThemeColors = { [K in ColorToken]: string };
 
+// --- Materials (decision D1): frosted / Liquid Glass for chrome that floats over media. ---
+// Tint is cream (light) or ink (dark) so the brand stays three colors. `alpha` has a floor:
+// main text must pass WCAG AA (4.5:1) even if the blur did nothing and the photo behind is
+// pure black (light mode) or pure white (dark mode). __tests__/material-test.ts enforces this, because
+// iPhone Safari can't tell us when Reduce Transparency is on.
+// `blur` is expo-blur intensity (1–100). On iOS 26+ Apple's Liquid Glass does its own blur.
+export type GlassVariant = 'regular' | 'thin';
+type Glass = { tint: string; alpha: number; blur: number };
+export const material: Record<ColorScheme, Record<GlassVariant, Glass>> = {
+  light: {
+    regular: { tint: brand.cream, alpha: 0.72, blur: 60 },
+    thin: { tint: brand.cream, alpha: 0.65, blur: 40 },
+  },
+  dark: {
+    regular: { tint: brand.ink, alpha: 0.76, blur: 60 },
+    thin: { tint: brand.ink, alpha: 0.7, blur: 40 },
+  },
+};
+export const MIN_GLASS_ALPHA = { light: 0.65, dark: 0.7 } as const;
+
+// A 1-pt light catching the top edge: the "glass" cue on solid and translucent surfaces alike.
+// Used on glass surfaces and as the only glass treatment allowed on the orange primary button.
+export const sheen = {
+  light: 'inset 0px 1px 0px rgba(255, 255, 255, 0.6)',
+  dark: 'inset 0px 1px 0px rgba(255, 255, 255, 0.14)',
+} as const;
+
+// `#RRGGBB` + alpha → `rgba(...)`. Lives here so other files never handle raw color values.
+export function withAlpha(hex: string, alpha: number): string {
+  const n = parseInt(hex.slice(1), 16);
+  return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alpha})`;
+}
+
 // --- Overlay palette: drawn on top of photos/video, same in both modes. ---
 // Hands vs feet differ by shape (circle vs rounded square), left vs right by color.
 const cyan = '#00C2FF';
@@ -88,6 +121,11 @@ export const radii = {
 export const borderWidth = {
   hairline: 1,
   thick: 2, // focus / error rings
+} as const;
+
+// Press feedback for glass controls, which can't be dimmed (see Button.tsx).
+export const press = {
+  scale: 0.97,
 } as const;
 
 export const opacity = {

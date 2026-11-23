@@ -1,12 +1,14 @@
 import { ActivityIndicator, Pressable, StyleSheet, View, type ViewStyle } from 'react-native';
 
 import { haptics } from '@/lib/haptics';
-import { opacity, radii, spacing, touch, type ThemeColors } from '@/theme/tokens';
+import { opacity, press, radii, sheen, spacing, touch, type ThemeColors } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
+import { Material } from './Material';
 import { Text, type TextColor } from './Text';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'ghost';
+// `glass` is for controls floating over a photo or video (decision D1), never in forms.
+export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'glass';
 
 export type ButtonProps = {
   label: string;
@@ -25,7 +27,13 @@ const variants: Record<ButtonVariant, { bg: keyof ThemeColors | null; text: Text
   primary: { bg: 'accent', text: 'onAccent' },
   secondary: { bg: 'surfaceAlt', text: 'textPrimary' },
   ghost: { bg: null, text: 'textPrimary' },
+  glass: { bg: null, text: 'textPrimary' },
 };
+
+// Glass views must not be faded (Apple: opacity < 1 on a glass parent drops the effect),
+// so the glass button shows a press by shrinking slightly instead of dimming.
+const pressedFor = (variant: ButtonVariant) =>
+  variant === 'glass' ? styles.pressedScale : styles.pressed;
 
 export function Button({
   label,
@@ -59,11 +67,18 @@ export function Button({
       style={({ pressed }) => [
         styles.base,
         { backgroundColor: v.bg ? colors[v.bg] : 'transparent' },
+        // Orange stays solid; the only glass treatment allowed on it is a top-edge sheen.
+        // Orange is the same in both modes, so it always gets the light sheen.
+        variant === 'primary' && { boxShadow: sheen.light },
+        variant === 'glass' && styles.clip,
         disabled && styles.disabled,
-        pressed && !inactive && styles.pressed,
+        pressed && !inactive && pressedFor(variant),
         style,
       ]}
     >
+      {variant === 'glass' ? (
+        <Material variant="thin" style={[StyleSheet.absoluteFill, styles.glassShape]} />
+      ) : null}
       {/* Label stays rendered (invisible) while loading so the button keeps its width. */}
       <View style={loading ? styles.hidden : null}>
         <Text variant="headline" color={v.text}>
@@ -89,6 +104,10 @@ const styles = StyleSheet.create({
   },
   center: { alignItems: 'center', justifyContent: 'center' },
   hidden: { opacity: 0 },
+  clip: { overflow: 'hidden' },
+  // Material needs the radius itself (not just the parent clip) so web blur corners round.
+  glassShape: { borderRadius: radii.card },
   pressed: { opacity: opacity.pressed },
+  pressedScale: { transform: [{ scale: press.scale }] },
   disabled: { opacity: opacity.disabled },
 });

@@ -18,6 +18,7 @@ import { scheduleOnRN } from 'react-native-worklets';
 import { motion, radii, size, spacing } from '@/theme/tokens';
 import { useTheme } from '@/theme/useTheme';
 
+import { Material } from './Material';
 import { Text } from './Text';
 
 export type SheetProps = {
@@ -25,6 +26,9 @@ export type SheetProps = {
   onClose: () => void;
   title?: string;
   children: ReactNode;
+  // Solid by default: most sheets hold forms (sliders, fields), and glass hurts readability
+  // there. Use 'glass' only for short sheets over a photo/video (decision D1).
+  material?: 'solid' | 'glass';
 };
 
 // Drag down further than this (pt) or flick faster than this (pt/s) to dismiss.
@@ -33,7 +37,7 @@ const DISMISS_VELOCITY = 800;
 
 // Bottom sheet: springs up in ~300 ms, clears the home indicator, closes on backdrop tap,
 // swipe down, Android back, or Esc on web. Reduce Motion → appears/disappears instantly.
-export function Sheet({ visible, onClose, title, children }: SheetProps) {
+export function Sheet({ visible, onClose, title, children, material = 'solid' }: SheetProps) {
   const { colors } = useTheme();
   const insets = useSafeAreaInsets();
   const { height: screenHeight } = useWindowDimensions();
@@ -107,12 +111,17 @@ export function Sheet({ visible, onClose, title, children }: SheetProps) {
             style={[
               styles.sheet,
               {
-                backgroundColor: colors.surface,
+                backgroundColor: material === 'glass' ? 'transparent' : colors.surface,
                 paddingBottom: insets.bottom + spacing.md,
               },
+              material === 'glass' && styles.clip,
               sheetStyle,
             ]}
           >
+            {/* Android note: a Modal is its own window, so glass sheets show the tint only there. */}
+            {material === 'glass' ? (
+              <Material variant="regular" style={[StyleSheet.absoluteFill, styles.topCorners]} />
+            ) : null}
             <View style={[styles.handle, { backgroundColor: colors.textSecondary }]} aria-hidden />
             {title ? <Text variant="headline">{title}</Text> : null}
             {children}
@@ -125,6 +134,8 @@ export function Sheet({ visible, onClose, title, children }: SheetProps) {
 
 const styles = StyleSheet.create({
   fill: { flex: 1 },
+  clip: { overflow: 'hidden' },
+  topCorners: { borderTopLeftRadius: radii.sheet, borderTopRightRadius: radii.sheet },
   sheet: {
     position: 'absolute',
     left: 0,
