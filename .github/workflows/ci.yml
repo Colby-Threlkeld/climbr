@@ -19,3 +19,20 @@ jobs:
       - run: npm run lint
       - run: npm run typecheck
       - run: npm test -- --ci
+
+  # The only place pgTAP/RLS tests run (decision D2: no Docker on the dev machine).
+  # GitHub's Linux runners have Docker, so the Supabase CLI can start a throwaway
+  # Postgres here, apply every migration + seed.sql, and run supabase/tests/.
+  db:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      # Installs the Supabase CLI at the exact version pinned in package.json.
+      - run: npm ci
+      - run: npx supabase db start
+      - run: npx supabase db reset
+      - run: npx supabase test db

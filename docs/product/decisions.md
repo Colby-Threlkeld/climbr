@@ -36,6 +36,7 @@ These resolve contradictions and gaps found when the spec was split. IDs (C = co
 | C3 | The Expo app is scaffolded **at the repo root**. There is no `cruxshot/` subfolder. |
 | C10 | Web hosting is **Vercel**. |
 | O3 | ~~The repo stays in OneDrive.~~ **Superseded Nov 2026 (step 02):** the repo lives **outside OneDrive** at `C:\dev\cruxshot`; GitHub is the backup. Reason: npm deletes a `node_modules` junction on every install ("Removing non-directory"), so there was no reliable way to keep `node_modules` out of OneDrive sync. |
+| D2 | **No Docker on the dev machine (Nov 2026, step 07).** Development uses a **hosted Supabase dev project** (free tier), not a local stack. Migrations go up with `npx supabase db push --remote`; the app's `.env` points at the hosted project. **pgTAP/RLS tests run only in CI**, where GitHub's Linux runners start a throwaway local database (`supabase db start`) and run `supabase db reset` + `supabase test db`. `test db` runs `pg_prove` in a container even against a remote database, so it can't run on this machine. A PR that adds a table can't merge until that CI job is green. The hosted project is **dev only**: never run `db reset` against it, and production gets its own project later. Trade-off accepted: slower feedback on RLS tests (push and wait for CI) in exchange for no Docker Desktop / WSL2. Revisit if CI round-trips become a bottleneck. |
 
 ### Data and contracts
 | ID | Decision |

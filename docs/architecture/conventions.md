@@ -40,7 +40,7 @@
 | Var | Where | Notes |
 |---|---|---|
 | `EXPO_PUBLIC_SUPABASE_URL` | app `.env` | public |
-| `EXPO_PUBLIC_SUPABASE_ANON_KEY` | app `.env` | public (RLS protects data) |
+| `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` | app `.env` | public (RLS protects data). Supabase's replacement for the legacy "anon" key (step 07) |
 | `EXPO_PUBLIC_POSTHOG_KEY`, `EXPO_PUBLIC_SENTRY_DSN` | app `.env` | public |
 | `SUPABASE_SERVICE_ROLE_KEY` | Modal secret, Supabase function secret | **never in app** |
 | `ANTHROPIC_API_KEY` | Modal secret | **never in app** |

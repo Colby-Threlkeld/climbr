@@ -46,7 +46,7 @@ npm install && npx expo start          # app (press w for web); --tunnel for pho
 npx expo install <pkg>                 # add packages (dev: npx expo install <pkg> "--" --save-dev)
 npm run lint && npm run typecheck && npm test   # npm run format fixes Prettier/CRLF issues
 npm run schemas                        # regenerate TS + Pydantic types
-npx supabase start | db reset | test db   # needs Docker Desktop
+npx supabase db push --remote          # hosted dev project, no Docker (D2); pgTAP runs in CI only
 cd worker && uv sync && uv run ruff check . && uv run pytest
 uv run python -m eval.run              # before model/prompt changes
 ```

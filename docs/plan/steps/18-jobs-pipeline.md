@@ -21,7 +21,7 @@ The app inserts a job, a database webhook triggers an Edge Function that calls t
 - Any real AI. Storage uploads (19).
 
 ## Prompt
-> Do step 18 (`docs/plan/steps/18-jobs-pipeline.md`). Read the docs it lists. Build the full job pipeline with a fake echo job: `jobs` migration with RLS + Realtime + pgTAP, a webhook-triggered Edge Function that HMAC-signs the call to the worker, an idempotent worker endpoint that reports staged progress, and a `useJob` hook with a dev screen. Give me commands (local Supabase + local worker exposed to it), files, and a checklist.
+> Do step 18 (`docs/plan/steps/18-jobs-pipeline.md`). Read the docs it lists. Build the full job pipeline with a fake echo job: `jobs` migration with RLS + Realtime + pgTAP, a webhook-triggered Edge Function that HMAC-signs the call to the worker, an idempotent worker endpoint that reports staged progress, and a `useJob` hook with a dev screen. Give me commands (hosted Supabase dev project per decision D2: deploy the function with `supabase functions deploy`, point the webhook at it, and expose the worker with `modal serve`), files, and a checklist.
 
 ## Expected files
 - `supabase/migrations/*_jobs.sql`, `supabase/functions/start-job/*`, `supabase/tests/jobs.sql`
