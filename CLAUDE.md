@@ -11,7 +11,19 @@ Read this every session. Then read **only** the docs your current step lists. In
 Built with Expo / React Native (TypeScript), shipped as a mobile **web PWA first** and native later. Python AI worker on Modal. Supabase for auth, db, storage, and realtime. The developer works on Windows.
 
 ## Current status
-**Step 03 done** (PR #2, CI green). **Step 04 in progress** on `feat/ui-primitives-1`, branched from `feat/theme-tokens`. Built: Button, Card, TextField, Chip, SegmentedControl, the haptics wrapper, and a dev gallery at `/_dev/gallery`; ESLint now blocks hard-coded colors **and sizes**. The checklist passed in headless Edge with an iPhone-size viewport, light and dark. Use `aria-*` props, not `accessibilityState`: react-native-web ignores the latter. Still needed on a real device: Expo Go rendering, haptics, and large accessibility text. The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised). **Next: step 05** once 04 is ✅.
+**Steps 03–04 code is on `main`. Step 05** is in PR #5 (Sheet, Toast, Slider, ProgressSteps; Reanimated 4 + Gesture Handler 3). **Step 05b in progress** on `feat/glass-materials`, branched from 05: glass materials per decision D1. Still needed on real devices for 04–05b: Expo Go, haptics, home indicator, Liquid Glass on iOS 26, and FPS readings.
+**Step 07 done** on `feat/db-profiles` (PR #6, CI green): `locations`, `profiles`, `body_profiles` with RLS, under-18 guards (trigger `profiles_guard`), and 21 pgTAP tests. Applied to the hosted dev project `lmxhqegtfpjakzkxoayj` (decision D2: no Docker). App client: `src/lib/supabase.ts` (web) / `supabase.native.ts` (expo-sqlite session storage).
+**Gotchas:**
+- Use `aria-*` props, not `accessibilityState` (react-native-web ignores it).
+- Use shared-value `.get()`/`.set()`, not `.value =` (React compiler lint).
+- Jest needs Reanimated's resolver plus the `jest.setup.js` mocks.
+- Never use opacity < 1 on glass; use a scale for press feedback.
+- Pass the corner radius to `Material` itself, not only its parent (web blur corners).
+- pgTAP runs only in CI (`db` job). Supabase CLI v3: use `--remote` (not `--linked`); read-only `db query --remote` needs `--read-only`.
+- The app key is `EXPO_PUBLIC_SUPABASE_PUBLISHABLE_KEY` (Supabase replaced the "anon" key).
+- The repo lives at `C:\dev\cruxshot`, outside OneDrive (decision O3, revised).
+
+**Next: step 06** once 05 and 05b are ✅ (step 08 needs 06 + 07).
 Update this line and the Commands section at the end of every step.
 
 ## How to work a step
